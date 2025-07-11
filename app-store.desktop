@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Loja de Aplicativos
+Name[en]=App Store
+Comment=Loja de aplicativos para Debian/Ubuntu
+Comment[en]=App store for Debian/Ubuntu
+Exec=python3 /usr/local/bin/app_store.py
+Icon=software-store
+Type=Application
+Categories=System;PackageManager;
+StartupNotify=true
+Keywords=software;package;install;apt;store;loja;aplicativo
