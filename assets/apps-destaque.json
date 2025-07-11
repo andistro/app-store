@@ -2,25 +2,16 @@
   {
     "nome": "Brave Browser",
     "imagem": "https://brave.com/static-assets/images/brave-og.png",
-    "pacote": "brave-browser",
-    "descricao": "Ferramenta de design colaborativo para interfaces e prototipagem.",
-    "versao": "0.10.0",
-    "categorias": ["Gráficos e Fotografia", "Ferramentas de desenvolvedores"]
+    "pacote": "brave-browser"
   },
   {
     "nome": "Inkscape",
-    "imagem": "https://raw.githubusercontent.com/andistro/app-store/refs/heads/alpha/assets/inkscape-banner.png",
-    "pacote": "inkscape",
-    "descricao": "Editor de gráficos vetoriais profissional e gratuito.",
-    "versao": "1.2.2",
-    "categorias": ["Gráficos e Fotografia"]
+    "imagem": "https://media.inkscape.org/media/shields/backgrounds/Winner_Inkscapes_Path-Artists_Blossom_1.4.2_for_releases_app_2200.png",
+    "pacote": "inkscape"
   },
   {
     "nome": "Visual Studio Code",
-    "imagem": "https://raw.githubusercontent.com/andistro/app-store/refs/heads/alpha/assets/vscode-banner.png",
-    "pacote": "code",
-    "descricao": "Editor de código moderno, extensível e com suporte a IA.",
-    "versao": "1.85.0",
-    "categorias": ["Ferramentas de desenvolvedores", "Utilitários"]
+    "imagem": "https://code.visualstudio.com/opengraphimg/opengraph-home.png",
+    "pacote": "code"
   }
 ]
