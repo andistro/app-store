@@ -1,0 +1,26 @@
+[
+  {
+    "nome": "Figma Linux",
+    "imagem": "https://raw.githubusercontent.com/andistro/app-store/refs/heads/alpha/assets/figma-banner.png",
+    "pacote": "figma-linux",
+    "descricao": "Ferramenta de design colaborativo para interfaces e prototipagem.",
+    "versao": "0.10.0",
+    "categorias": ["Gráficos e Fotografia", "Ferramentas de desenvolvedores"]
+  },
+  {
+    "nome": "Inkscape",
+    "imagem": "https://raw.githubusercontent.com/andistro/app-store/refs/heads/alpha/assets/inkscape-banner.png",
+    "pacote": "inkscape",
+    "descricao": "Editor de gráficos vetoriais profissional e gratuito.",
+    "versao": "1.2.2",
+    "categorias": ["Gráficos e Fotografia"]
+  },
+  {
+    "nome": "Visual Studio Code",
+    "imagem": "https://raw.githubusercontent.com/andistro/app-store/refs/heads/alpha/assets/vscode-banner.png",
+    "pacote": "code",
+    "descricao": "Editor de código moderno, extensível e com suporte a IA.",
+    "versao": "1.85.0",
+    "categorias": ["Ferramentas de desenvolvedores", "Utilitários"]
+  }
+]
