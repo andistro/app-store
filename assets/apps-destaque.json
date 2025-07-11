@@ -1,8 +1,8 @@
 [
   {
-    "nome": "Figma Linux",
+    "nome": "Brave Browser",
     "imagem": "https://raw.githubusercontent.com/andistro/app-store/refs/heads/alpha/assets/figma-banner.png",
-    "pacote": "figma-linux",
+    "pacote": "brave-browser",
     "descricao": "Ferramenta de design colaborativo para interfaces e prototipagem.",
     "versao": "0.10.0",
     "categorias": ["Gráficos e Fotografia", "Ferramentas de desenvolvedores"]
