@@ -1,102 +1,141 @@
 #!/bin/bash
 
-# Instalador da Loja de Aplicativos Linux
-# Para sistemas Debian/Ubuntu no Termux
+# Script de instalação do Software Store
+# Para usar: bash install.sh
 
-set -e
+echo "=== Instalação do Software Store ==="
+echo
 
-echo "=== Instalador da Loja de Aplicativos Linux ==="
+# Verificar se está rodando como root
+if [[ $EUID -eq 0 ]]; then
+   echo "Este script não deve ser executado como root"
+   echo "Execute: bash install.sh"
+   exit 1
+fi
 
-# Verifica sistema
-if ! command -v apt-get &> /dev/null; then
-    echo "Erro: Este instalador requer um sistema Debian/Ubuntu"
+# Verificar dependências
+echo "Verificando dependências..."
+
+# Lista de pacotes necessários
+DEPS=(
+    "python3"
+    "python3-gi"
+    "python3-gi-cairo"
+    "gir1.2-gtk-3.0"
+    "gir1.2-webkit2-4.0"
+    "apt-utils"
+    "sudo"
+)
+
+MISSING_DEPS=()
+
+for dep in "${DEPS[@]}"; do
+    if ! dpkg -l | grep -q "^ii  $dep "; then
+        MISSING_DEPS+=("$dep")
+    fi
+done
+
+if [ ${#MISSING_DEPS[@]} -gt 0 ]; then
+    echo "Instalando dependências em falta..."
+    echo "Pacotes necessários: ${MISSING_DEPS[*]}"
+    
+    sudo apt-get update
+    sudo apt-get install -y "${MISSING_DEPS[@]}"
+    
+    if [ $? -ne 0 ]; then
+        echo "Erro ao instalar dependências"
+        exit 1
+    fi
+fi
+
+echo "✓ Todas as dependências estão instaladas"
+
+# Criar diretórios necessários
+echo "Criando diretórios..."
+mkdir -p ~/.local/share/applications
+mkdir -p ~/.local/bin
+
+# Baixar ou usar o arquivo software-store.py
+if [ -f "software-store.py" ]; then
+    echo "Usando arquivo software-store.py local..."
+    SCRIPT_FILE="software-store.py"
+else
+    echo "Erro: arquivo software-store.py não encontrado"
+    echo "Certifique-se de que o arquivo está no mesmo diretório que este script"
     exit 1
 fi
 
-# Atualiza repositórios
-echo "Atualizando repositórios..."
-apt-get update
-
-# Instala dependências
-echo "Instalando dependências..."
-apt-get install -y \
-    python3 \
-    python3-pip \
-    python3-gi \
-    python3-gi-cairo \
-    gir1.2-gtk-3.0 \
-    gir1.2-webkit2-4.0 \
-    python3-requests \
-    xdg-utils \
-    desktop-file-utils
-
-# Instala dependências Python
-echo "Instalando dependências Python..."
-pip3 install --user requests
-
-# Cria diretórios
-echo "Criando diretórios..."
-mkdir -p ~/.local/bin
-mkdir -p ~/.local/share/applications
-mkdir -p ~/.local/share/software-store
-
-# Copia arquivo principal
+# Copiar arquivo para ~/.local/bin
 echo "Instalando aplicativo..."
-cp software-store.py ~/.local/bin/software-store
-chmod +x ~/.local/bin/software-store
+cp "$SCRIPT_FILE" ~/.local/bin/software-store.py
+chmod +x ~/.local/bin/software-store.py
 
-# Cria arquivo .desktop
+# Criar arquivo .desktop
 echo "Criando entrada no menu..."
 cat > ~/.local/share/applications/software-store.desktop << EOF
 [Desktop Entry]
-Name=Loja de Aplicativos
-Name[en]=Software Store
-Comment=Loja de aplicativos para Debian/Ubuntu
-Comment[en]=Software store for Debian/Ubuntu
-Exec=python3 ~/.local/bin/software-store
-Icon=applications-accessories
-Terminal=false
+Version=1.0
 Type=Application
+Name=Software Store
+Comment=Loja de aplicativos Linux para Termux/proot-distro
+Exec=$HOME/.local/bin/software-store.py %U
+Icon=software-store
+Terminal=false
+NoDisplay=false
 Categories=System;PackageManager;
 MimeType=x-scheme-handler/software-store;
 StartupNotify=true
 EOF
 
-# Torna executável
 chmod +x ~/.local/share/applications/software-store.desktop
 
-# Registra esquema URI
-echo "Registrando deeplinks..."
-xdg-mime default software-store.desktop x-scheme-handler/software-store
-
-# Atualiza cache do desktop
-if command -v update-desktop-database &> /dev/null; then
-    update-desktop-database ~/.local/share/applications/
+# Registrar handler de deeplink
+echo "Registrando handler de deeplink..."
+if command -v xdg-mime >/dev/null 2>&1; then
+    xdg-mime default software-store.desktop x-scheme-handler/software-store
 fi
 
-# Adiciona ao PATH se necessário
-if ! echo $PATH | grep -q ~/.local/bin; then
-    echo ""
-    echo "IMPORTANTE: Adicione ~/.local/bin ao seu PATH"
-    echo "Execute: echo 'export PATH=\$PATH:\$HOME/.local/bin' >> ~/.bashrc"
-    echo "E depois: source ~/.bashrc"
+# Atualizar cache de aplicativos
+if command -v update-desktop-database >/dev/null 2>&1; then
+    update-desktop-database ~/.local/share/applications
 fi
 
-echo ""
-echo "=== Instalação concluída! ==="
-echo ""
-echo "Para iniciar a loja de aplicativos:"
-echo "1. Execute: python3 ~/.local/bin/software-store"
-echo "2. Ou procure por 'Loja de Aplicativos' no menu"
-echo ""
-echo "Para testar deeplinks, abra no navegador:"
-echo "software-store://pkg?search=inkscape"
-echo ""
-echo "Recursos disponíveis:"
-echo "- Busca de pacotes do repositório"
-echo "- Instalação e remoção de programas"
-echo "- Suporte a deeplinks"
-echo "- Interface responsiva"
-echo "- Aplicativos em destaque"
-echo "- Modificação automática para apps que precisam --no-sandbox"
-echo ""
+# Adicionar ~/.local/bin ao PATH se necessário
+if ! echo "$PATH" | grep -q "$HOME/.local/bin"; then
+    echo "Adicionando ~/.local/bin ao PATH..."
+    
+    # Adicionar ao .bashrc
+    if [ -f ~/.bashrc ]; then
+        echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+    fi
+    
+    # Adicionar ao .profile
+    if [ -f ~/.profile ]; then
+        echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.profile
+    fi
+    
+    echo "Reinicie o terminal ou execute: source ~/.bashrc"
+fi
+
+echo
+echo "=== Instalação concluída com sucesso! ==="
+echo
+echo "Para executar a Software Store:"
+echo "  1. Procure por 'Software Store' no menu de aplicativos"
+echo "  2. Execute: ~/.local/bin/software-store.py"
+echo "  3. Use deeplinks: software-store://pkg?search=inkscape"
+echo
+echo "Exemplo de uso:"
+echo "  software-store://pkg?search=inkscape"
+echo "  software-store://pkg?search=gimp"
+echo "  software-store://pkg?search=firefox"
+echo
+echo "Funcionalidades principais:"
+echo "  • Interface gráfica moderna com tema GTK3"
+echo "  • Busca de pacotes em repositórios Debian/Ubuntu"
+echo "  • Carrossel de aplicativos em destaque"
+echo "  • Suporte a deeplinks para instalação rápida"
+echo "  • Compatível com Termux/proot-distro"
+echo "  • Adiciona automaticamente --no-sandbox para apps necessários"
+echo "  • Interface responsiva para diferentes tamanhos de tela"
+echo
