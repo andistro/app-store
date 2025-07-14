@@ -14,4 +14,9 @@
     "imagem": "https://code.visualstudio.com/opengraphimg/opengraph-home.png",
     "pacote": "code"
   }
+   {
+    "nome": "Vivaldi",
+    "imagem": "https://vivaldi.com/wp-content/uploads/vivaldi_og_7.png",
+    "pacote": "vivaldi-stable"
+  }
 ]

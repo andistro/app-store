@@ -83,7 +83,6 @@ class SoftwareStore:
                 margin: 8px;
                 padding: 16px;
                 min-width: 280px;
-                max-width: 300px;
             }
         """)
         
