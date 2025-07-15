@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ pkg.name }}</title>
+    <link rel="stylesheet" href="style.css">
+    <meta property="al:linux:app_name" content="{{ pkg.name }}" />
+    <meta property="al:linux:app_store_id" content="{{ pkg.package }}" />
+    <meta property="al:linux:url" content="software-store://pkg?search={{ pkg.package }}" />
+</head>
+<body>
+    <div class="details-container">
+        <img class="icon" src="{{ pkg.icon }}" />
+        <h2>{{ pkg.name }}</h2>
+        <p>{{ pkg.description }}</p>
+        <div>
+            <button id="install-btn">Instalar</button>
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="screenshots">
+            <!-- Imagens de screenshots -->
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

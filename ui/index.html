@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Software Store</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="search-bar">
+        <input type="search" id="search" placeholder="Buscar aplicativos..." />
+        <button onclick="doSearch()">Buscar</button>
+    </div>
+    <div class="carousel">
+        <!-- Carrossel de destaque -->
+        {{ apps_destaque }}
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
